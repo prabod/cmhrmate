@@ -25,7 +25,6 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -38,6 +37,7 @@
     <permission
         android:name="com.emergelk.comeheremate.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.emergelk.comeheremate.permission.C2D_MESSAGE" />
 
     <application
@@ -64,22 +64,23 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="Login Or Signup"></activity>
+            android:label="Login Or Signup" />
         <activity
             android:name=".MapsActivity"
             android:label="map" />
         <activity
             android:name=".SignupActivity"
-            android:label="@string/title_activity_signup"></activity>
+            android:label="@string/title_activity_signup" />
         <activity
-            android:name="com.emergelk.comeheremate.VerifyMobile"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+            android:name=".VerifyMobile"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
-        <receiver android:name="com.emergelk.comeheremate.CognalysVerification">
+        <receiver android:name=".CognalysVerification">
             <intent-filter>
                 <action android:name="com.emergelk.comeheremate" />
             </intent-filter>
         </receiver>
+
         <service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.ParseBroadcastReceiver">
@@ -104,12 +105,16 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <!--
-                  IMPORTANT: Change "com.parse.starter" to match your app's package name.
-                -->
+                <!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="com.emergelk.comeheremate" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".WaitForFriend"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_wait_for_friend"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

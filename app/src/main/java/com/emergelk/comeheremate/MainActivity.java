@@ -16,13 +16,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.SimpleAdapter;
 
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static android.telephony.PhoneNumberUtils.stripSeparators;
@@ -82,15 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String userName = mTxtPhoneNo.getText().toString();
                     userName = userName.replaceAll("[^\\+0-9]", "");
-                    ParseQuery<ParseUser> query = ParseUser.getQuery();
-                    query.whereEqualTo("username", userName);
-                    List<ParseUser> users = null;
-                    try {
-                        users = query.find();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    int len = users.size();
+                    Intent intent = new Intent(MainActivity.this, WaitForFriend.class);
+                    intent.putExtra("uname", userName);
+                    startActivity(intent);
 
                 }
             });
