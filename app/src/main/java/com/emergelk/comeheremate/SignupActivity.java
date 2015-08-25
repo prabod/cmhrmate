@@ -72,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
                             ParseUser currentUser = ParseUser.getCurrentUser();
                             ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                             installation.put("username", currentUser.getUsername());
-                            installation.saveInBackground();
+                            installation.save();
                             finish();
                             Intent goToMain = new Intent(SignupActivity.this, MainActivity.class);
                             startActivity(goToMain);

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#1ac6ff"
-    tools:context="com.matesnetwork.Cognalys.VerifyMobile">
+    tools:context="com.emergelk.comeheremate.VerifyMobile">
 
     <RelativeLayout
         android:id="@+id/loadinglayout"
