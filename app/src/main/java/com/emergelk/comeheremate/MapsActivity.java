@@ -1,6 +1,10 @@
 package com.emergelk.comeheremate;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -42,6 +47,25 @@ public class MapsActivity extends AppCompatActivity implements RoutingListener, 
     private String LOG_TAG = "MyActivity";
     private ProgressDialog progressDialog;
     private Polyline polyline;
+    private Marker mark3;
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mark3 != null) {
+                mark3.remove();
+            }
+            // Extract data included in the Intent
+            String location = intent.getStringExtra("location");
+            String[] loc = location.split(",");
+
+            LatLng rdperson = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
+            Marker mark3 = map.addMarker(new MarkerOptions()
+                    .position(rdperson)
+                    .title("I'm Here!!")
+                    .flat(true));
+
+        }
+    };
 
     /**
      * This activity loads a map and then displays the route and pushpins on it.
@@ -51,8 +75,15 @@ public class MapsActivity extends AppCompatActivity implements RoutingListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         ButterKnife.inject(this);
-        route();
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Intent intentLogIn = getIntent();
+        Bundle bundle = intentLogIn.getExtras();
+        if (intentLogIn.hasExtra("location")) {
+            String[] loc = bundle.getString("location").split(",");
+            end = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
+        }
+        route();
 
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -99,7 +130,7 @@ public class MapsActivity extends AppCompatActivity implements RoutingListener, 
 
                         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
                         CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
-
+                        start = new LatLng(location.getLatitude(), location.getLongitude());
                         map.moveCamera(center);
                         map.animateCamera(zoom);
                     }
@@ -155,7 +186,6 @@ public class MapsActivity extends AppCompatActivity implements RoutingListener, 
 
     }
 
-
     public void route() {
         if (start == null || end == null) {
             if (start == null) {
@@ -172,7 +202,6 @@ public class MapsActivity extends AppCompatActivity implements RoutingListener, 
             routing.execute();
         }
     }
-
 
     @Override
     public void onRoutingFailure() {
@@ -238,5 +267,18 @@ public class MapsActivity extends AppCompatActivity implements RoutingListener, 
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getApplicationContext().registerReceiver(mMessageReceiver, new IntentFilter("updateLocation"));
+    }
+
+    //Must unregister onPause()
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getApplicationContext().unregisterReceiver(mMessageReceiver);
     }
 }

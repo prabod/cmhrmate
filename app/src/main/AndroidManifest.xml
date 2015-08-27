@@ -69,15 +69,13 @@
         <activity
             android:name=".MapsActivity"
             android:label="map">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:host="host"
-                    android:path="/map"
-                    android:scheme="comeheremate" />
-            </intent-filter>
+            <receiver android:name="updater">
 
+                <intent-filter>
+                    <action android:name="updateLocation"></action>
+                </intent-filter>
+
+            </receiver>
         </activity>
         <activity
             android:name=".SignupActivity"
@@ -101,7 +99,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:name="com.emergelk.comeheremate.PushReciever"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
